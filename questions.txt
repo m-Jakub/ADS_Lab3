@@ -1,0 +1,1 @@
+dodatkowa funkcja - Key = string, Info = int (yes)

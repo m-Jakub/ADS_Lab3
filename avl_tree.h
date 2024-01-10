@@ -34,6 +34,15 @@ private:
         newNode->right = copy(subtree->right);
         newNode->height = subtree->height;
     }
+    void clear(Node *subtree)
+    {
+        if (!subtree)
+            return;
+        clear(subtree->left);
+        clear(subtree->right);
+        delete subtree;
+        return;
+    }
 
 public:
     avl_tree() : root(nullptr) {}
@@ -51,8 +60,13 @@ public:
     bool insert(const Key &key, const Info &info);
     bool remove(const Key &key);
     bool search(const Key &key) const;
-    bool empty() const;
-    void clear();
+    bool empty() const { return root == nullptr; }
+    void clear()
+    {
+        clear(root);
+        root = nullptr;
+    }
+    // indexing operator overloading
     void inorder(ostream &out) const;
     void graph(ostream &out) const;
 };
