@@ -1,4 +1,10 @@
+#ifndef AVL_TREE_H
+#define AVL_TREE_H
+
 #include <iostream>
+#include <string>
+#include "avl_tree_test.h"
+#include <iomanip>
 
 using namespace std;
 
@@ -25,22 +31,73 @@ private:
         if (subtree == nullptr)
         {
             subtree = new Node(key, info);
+            // balance(subtree);
             return true;
         }
         if (key == subtree->key)
         {
-            retyrn false;
+            return false;
+        }
+        if (key < subtree->key)
+        {
+            insert(key, info, subtree->left);
+            // balance(subtree);
+            return true;
+        }
+        else
+        {
+            insert(key, info, subtree->right);
+            // balance(subtree);
+            return true;
         }
     }
     void remove(const Key &key, Node *&subtree);
-    void search(const DataType &item, bool &found, BinNodePointer &locptr, BinNodePointer &parent);
+    // void search();
     void inorder(ostream &out, Node *subtree) const;
-    void graph(ostream &out, Node *subtree, int indent) const;
-    int height(Node *subtree);
-    int balance_factor(Node *subtree);
-    void balance(Node *&subtree);
-    void left_rotation(Node *&subtree);
-    void right_rotation(Node *&subtree);
+    void graph(ostream &out, Node *subtree, int indent) const
+    {
+        if (subtree == nullptr)
+            return;
+        graph(out, subtree->right, indent + 8);
+        out << setw(indent) << " " << subtree->key << endl;
+        graph(out, subtree->left, indent + 8);
+    }
+    int height(Node *subtree)
+    {
+        if (subtree == nullptr)
+            return 0;
+        return subtree->height;
+    }
+    int balance_factor(Node *subtree) { return height(subtree->right) - height(subtree->left); }
+    void balance(Node *&subtree)
+    {
+        if (balance_factor(subtree) == 2)
+        {
+            if (balance_factor(subtree->right) == -1)
+                right_rotation(subtree->right);
+            left_rotation(subtree);
+        }
+        if (balance_factor(subtree) == -2)
+        {
+            if (balance_factor(subtree->left) == 1)
+                left_rotation(subtree->left);
+            right_rotation(subtree);
+        }
+    }
+    void left_rotation(Node *&subtree)
+    {
+        Node *temp = subtree->right;
+        subtree->right = temp->left;
+        temp->left = subtree;
+        subtree = temp;
+    }
+    void right_rotation(Node *&subtree)
+    {
+        Node *temp = subtree->left;
+        subtree->left = temp->right;
+        temp->right = subtree;
+        subtree = temp;
+    }
     Node *copy(Node *subtree)
     {
         if (subtree == nullptr)
@@ -73,10 +130,7 @@ public:
         }
         return *this;
     }
-    bool insert(const Key &key, const Info &info)
-    {
-        return insert(key, info, root);
-    }
+    bool insert(const Key &key, const Info &info) { return insert(key, info, root); }
     bool update_info(const Key &key, const Info &info);
     bool remove(const Key &key);
     bool search(const Key &key, Info &toReturn) const;
@@ -88,5 +142,7 @@ public:
     }
     // indexing operator overloading
     void inorder(ostream &out) const;
-    void graph(ostream &out) const;
+    void graph(ostream &out) const { graph(out, root, 0); }
 };
+
+#endif // AVL_TREE_H
