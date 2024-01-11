@@ -27,7 +27,10 @@ private:
             subtree = new Node(key, info);
             return true;
         }
-        
+        if (key == subtree->key)
+        {
+            retyrn false;
+        }
     }
     void remove(const Key &key, Node *&subtree);
     void search(const DataType &item, bool &found, BinNodePointer &locptr, BinNodePointer &parent);
