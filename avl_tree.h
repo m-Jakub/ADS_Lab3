@@ -20,7 +20,15 @@ private:
 
     Node *root;
 
-    void insert(const Key &key, const Info &info, Node *&subtree);
+    bool insert(const Key &key, const Info &info, Node *&subtree)
+    {
+        if (subtree == nullptr)
+        {
+            subtree = new Node(key, info);
+            return true;
+        }
+        
+    }
     void remove(const Key &key, Node *&subtree);
     void search(const DataType &item, bool &found, BinNodePointer &locptr, BinNodePointer &parent);
     void inorder(ostream &out, Node *subtree) const;
@@ -62,10 +70,13 @@ public:
         }
         return *this;
     }
-    bool insert(const Key &key, const Info &info);
+    bool insert(const Key &key, const Info &info)
+    {
+        return insert(key, info, root);
+    }
     bool update_info(const Key &key, const Info &info);
     bool remove(const Key &key);
-    bool search(const Key &key) const;
+    bool search(const Key &key, Info &toReturn) const;
     bool empty() const { return root == nullptr; }
     void clear()
     {
