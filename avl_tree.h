@@ -12,7 +12,7 @@ private:
         Info info;
         Node *left;
         Node *right;
-        int height;
+        int height = 1;
 
         Node() : left(nullptr), right(nullptr) {}
         Node(const Key &key, const Info &info) : key(key), info(info), left(nullptr), right(nullptr) {}
@@ -20,9 +20,14 @@ private:
 
     Node *root;
 
+    void insert(const Key &key, const Info &info, Node *&subtree);
+    void remove(const Key &key, Node *&subtree);
     void search(const DataType &item, bool &found, BinNodePointer &locptr, BinNodePointer &parent);
     void inorder(ostream &out, Node *subtree) const;
     void graph(ostream &out, Node *subtree, int indent) const;
+    int height(Node *subtree);
+    int balance_factor(Node *subtree);
+    void balance(Node *&subtree);
     void left_rotation(Node *&subtree);
     void right_rotation(Node *&subtree);
     Node *copy(Node *subtree)
@@ -58,6 +63,7 @@ public:
         return *this;
     }
     bool insert(const Key &key, const Info &info);
+    bool update_info(const Key &key, const Info &info);
     bool remove(const Key &key);
     bool search(const Key &key) const;
     bool empty() const { return root == nullptr; }
