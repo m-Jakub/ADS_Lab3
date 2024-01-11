@@ -31,7 +31,6 @@ private:
         if (subtree == nullptr)
         {
             subtree = new Node(key, info);
-            // balance(subtree);
             return true;
         }
         if (key == subtree->key)
@@ -41,13 +40,15 @@ private:
         if (key < subtree->key)
         {
             insert(key, info, subtree->left);
-            // balance(subtree);
+            subtree->height = max(height(subtree->left), height(subtree->right)) + 1;
+            balance(subtree);
             return true;
         }
         else
         {
             insert(key, info, subtree->right);
-            // balance(subtree);
+            subtree->height = max(height(subtree->left), height(subtree->right)) + 1;
+            balance(subtree);
             return true;
         }
     }
@@ -90,6 +91,8 @@ private:
         subtree->right = temp->left;
         temp->left = subtree;
         subtree = temp;
+        subtree->left->height = max(height(subtree->left->left), height(subtree->left->right)) + 1;
+        subtree->height = max(height(subtree->left), height(subtree->right)) + 1;
     }
     void right_rotation(Node *&subtree)
     {
@@ -97,6 +100,8 @@ private:
         subtree->left = temp->right;
         temp->right = subtree;
         subtree = temp;
+        subtree->right->height = max(height(subtree->right->left), height(subtree->right->right)) + 1;
+        subtree->height = max(height(subtree->left), height(subtree->right)) + 1;
     }
     Node *copy(Node *subtree)
     {
@@ -106,6 +111,7 @@ private:
         newNode->left = copy(subtree->left);
         newNode->right = copy(subtree->right);
         newNode->height = subtree->height;
+        return newNode;
     }
     void clear(Node *subtree)
     {
