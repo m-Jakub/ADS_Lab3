@@ -26,6 +26,16 @@ private:
 
     Node *root;
 
+    Node *copy(Node *subtree)
+    {
+        if (subtree == nullptr)
+            return nullptr;
+        Node *newNode = new Node(subtree->key, subtree->info);
+        newNode->left = copy(subtree->left);
+        newNode->right = copy(subtree->right);
+        newNode->height = subtree->height;
+        return newNode;
+    }
     bool insert(const Key &key, const Info &info, Node *&subtree)
     {
         if (subtree == nullptr)
@@ -52,9 +62,18 @@ private:
             return true;
         }
     }
+    void clear(Node *subtree)
+    {
+        if (!subtree)
+            return;
+        clear(subtree->left);
+        clear(subtree->right);
+        delete subtree;
+        return;
+    }
     void remove(const Key &key, Node *&subtree);
     // void search();
-    void inorder(ostream &out, Node *subtree) const;
+    // void inorder(ostream &out, Node *subtree) const;
     void graph(ostream &out, Node *subtree, int indent) const
     {
         if (subtree == nullptr)
@@ -103,25 +122,6 @@ private:
         subtree->right->height = max(height(subtree->right->left), height(subtree->right->right)) + 1;
         subtree->height = max(height(subtree->left), height(subtree->right)) + 1;
     }
-    Node *copy(Node *subtree)
-    {
-        if (subtree == nullptr)
-            return nullptr;
-        Node *newNode = new Node(subtree->key, subtree->info);
-        newNode->left = copy(subtree->left);
-        newNode->right = copy(subtree->right);
-        newNode->height = subtree->height;
-        return newNode;
-    }
-    void clear(Node *subtree)
-    {
-        if (!subtree)
-            return;
-        clear(subtree->left);
-        clear(subtree->right);
-        delete subtree;
-        return;
-    }
 
 public:
     avl_tree() : root(nullptr) {}
@@ -137,9 +137,9 @@ public:
         return *this;
     }
     bool insert(const Key &key, const Info &info) { return insert(key, info, root); }
-    bool update_info(const Key &key, const Info &info);
-    bool remove(const Key &key);
-    bool search(const Key &key, Info &toReturn) const;
+    // bool update_info(const Key &key, const Info &info);
+    bool remove(const Key &key) { remove(key, root); }
+    // bool search(const Key &key, Info &toReturn) const;
     bool empty() const { return root == nullptr; }
     void clear()
     {
@@ -147,7 +147,8 @@ public:
         root = nullptr;
     }
     // indexing operator overloading
-    void inorder(ostream &out) const;
+    // operator-
+    // void inorder(ostream &out) const;
     void graph(ostream &out) const { graph(out, root, 0); }
 };
 
