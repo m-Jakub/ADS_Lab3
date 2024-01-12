@@ -71,7 +71,49 @@ private:
         delete subtree;
         return;
     }
-    void remove(const Key &key, Node *&subtree);
+    bool remove(const Key &key, Node *&subtree)
+    {
+        if (subtree == nullptr)
+            return false;
+        if (key == subtree->key)
+        {
+            if (subtree->left == nullptr && subtree->right == nullptr)
+            {
+                delete subtree;
+                subtree = nullptr;
+                return true;
+            }
+            if (subtree->left == nullptr)
+            {
+                Node *temp = subtree;
+                subtree = subtree->right;
+                delete temp;
+                return true;
+            }
+            if (subtree->right == nullptr)
+            {
+                Node *temp = subtree;
+                subtree = subtree->left;
+                delete temp;
+                return true;
+            }
+            Node *temp = subtree->right;
+            while (temp->left != nullptr)
+                temp = temp->left;
+            swap(subtree->key, temp->key);
+            swap(subtree->info, temp->info);
+            remove(key, subtree->right);
+        }
+        if (key < subtree->key)
+        {
+            return remove(key, subtree->left);
+        }
+        else
+        {
+            return remove(key, subtree->right);
+        }
+        
+    }
     // void search();
     // void inorder(ostream &out, Node *subtree) const;
     void graph(ostream &out, Node *subtree, int indent) const
@@ -91,15 +133,16 @@ private:
     int balance_factor(Node *subtree) { return height(subtree->right) - height(subtree->left); }
     void balance(Node *&subtree)
     {
-        if (balance_factor(subtree) == 2)
+        int balance = balance_factor(subtree);
+        if (balance == 2)
         {
-            if (balance_factor(subtree->right) == -1)
+            if (balance == -1)
                 right_rotation(subtree->right);
             left_rotation(subtree);
         }
-        if (balance_factor(subtree) == -2)
+        if (balance == -2)
         {
-            if (balance_factor(subtree->left) == 1)
+            if (balance == 1)
                 left_rotation(subtree->left);
             right_rotation(subtree);
         }
