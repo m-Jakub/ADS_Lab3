@@ -49,18 +49,23 @@ private:
         }
         if (key < subtree->key)
         {
-            insert(key, info, subtree->left);
-            subtree->height = max(height(subtree->left), height(subtree->right)) + 1;
-            balance(subtree);
-            return true;
+            if (insert(key, info, subtree->left))
+            {
+                subtree->height = max(height(subtree->left), height(subtree->right)) + 1;
+                balance(subtree);
+                return true;
+            }
         }
         else
         {
-            insert(key, info, subtree->right);
-            subtree->height = max(height(subtree->left), height(subtree->right)) + 1;
-            balance(subtree);
-            return true;
+            if (insert(key, info, subtree->right))
+            {
+                subtree->height = max(height(subtree->left), height(subtree->right)) + 1;
+                balance(subtree);
+                return true;
+            }
         }
+        return false;
     }
     void clear(Node *subtree)
     {
@@ -112,7 +117,6 @@ private:
         {
             return remove(key, subtree->right);
         }
-        
     }
     // void search();
     // void inorder(ostream &out, Node *subtree) const;
