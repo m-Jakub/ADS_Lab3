@@ -91,9 +91,19 @@ void test()
     tree.graph(cout);
 }
 
+void test2()
+{
+    avl_tree<string, int> tree;
+    tree.insert("a", 1);
+    int a;
+    assert(tree.search("a", a));
+    assert(!tree.search("b", a));
+}
+
 int main()
 {
     // test_constructor();
-    test();
+    // test();
+    test2();
     return 0;
 }

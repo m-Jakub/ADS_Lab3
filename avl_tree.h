@@ -129,7 +129,17 @@ private:
         }
         return false;
     }
-    // void search();
+    Node *search(const Key &key, Node *subtree)
+    {
+        if (subtree == nullptr)
+            return nullptr;
+        if (key == subtree->key)
+            return subtree;
+        if (key < subtree->key)
+            return search(key, subtree->left);
+        else
+            return search(key, subtree->right);
+    }
     // void inorder(ostream &out, Node *subtree) const;
     void graph(ostream &out, Node *subtree, int indent) const
     {
@@ -195,9 +205,16 @@ public:
         return *this;
     }
     bool insert(const Key &key, const Info &info) { return insert(key, info, root); }
-    // bool update_info(const Key &key, const Info &info);
+    // bool change_info(const Key &key, const Info &info);
     bool remove(const Key &key) { return remove(key, root); }
-    // bool search(const Key &key, Info &toReturn) const;
+    bool search(const Key &key, Info &toReturn)
+    {
+        Node *node = search(key, root);
+        if (node == nullptr)
+            return false;
+        toReturn = node->info;
+        return true;
+    }
     bool empty() const { return root == nullptr; }
     void clear()
     {
