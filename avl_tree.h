@@ -107,16 +107,27 @@ private:
                 temp = temp->left;
             swap(subtree->key, temp->key);
             swap(subtree->info, temp->info);
-            remove(key, subtree->right);
+            return remove(key, subtree->right);
         }
         if (key < subtree->key)
         {
-            return remove(key, subtree->left);
+            if (remove(key, subtree->left))
+            {
+                subtree->height = max(height(subtree->left), height(subtree->right)) + 1;
+                balance(subtree);
+                return true;
+            }
         }
         else
         {
-            return remove(key, subtree->right);
+            if (remove(key, subtree->right))
+            {
+                subtree->height = max(height(subtree->left), height(subtree->right)) + 1;
+                balance(subtree);
+                return true;
+            }
         }
+        return false;
     }
     // void search();
     // void inorder(ostream &out, Node *subtree) const;
@@ -185,7 +196,7 @@ public:
     }
     bool insert(const Key &key, const Info &info) { return insert(key, info, root); }
     // bool update_info(const Key &key, const Info &info);
-    bool remove(const Key &key) { remove(key, root); }
+    bool remove(const Key &key) { return remove(key, root); }
     // bool search(const Key &key, Info &toReturn) const;
     bool empty() const { return root == nullptr; }
     void clear()
