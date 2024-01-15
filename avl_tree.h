@@ -82,31 +82,28 @@ private:
         if (key == subtree->key)
         {
             if (subtree->left == nullptr && subtree->right == nullptr)
-            {
-                delete subtree;
                 subtree = nullptr;
-                return true;
-            }
-            if (subtree->left == nullptr)
+            else if (subtree->left == nullptr)
             {
                 Node *temp = subtree;
                 subtree = subtree->right;
-                delete temp;
-                return true;
             }
-            if (subtree->right == nullptr)
+            else if (subtree->right == nullptr)
             {
                 Node *temp = subtree;
                 subtree = subtree->left;
-                delete temp;
-                return true;
             }
-            Node *temp = subtree->right;
-            while (temp->left != nullptr)
-                temp = temp->left;
-            swap(subtree->key, temp->key);
-            swap(subtree->info, temp->info);
-            return remove(key, subtree->right);
+            else
+            {
+                Node *temp = subtree->right;
+                while (temp->left != nullptr)
+                    temp = temp->left;
+                swap(subtree->key, temp->key);
+                swap(subtree->info, temp->info);
+                remove(key, subtree->right);
+            }
+            delete subtree;
+            return true;
         }
         if (key < subtree->key)
         {
@@ -240,10 +237,12 @@ public:
         root = nullptr;
     }
     // indexing operator overloading
+    
     // operator-
     void inorder(ostream &out) const { inorder(out, root); }
-
     void graph(ostream &out) const { graph(out, root, 0); }
 };
 
 #endif // AVL_TREE_H
+
+// sprawdzić czy height jest dobrze liczone
