@@ -89,6 +89,7 @@ void test()
     tree.graph(cout);
     tree.remove(28.28);
     tree.graph(cout);
+    tree.inorder(cout);
 }
 
 void test2()
@@ -97,13 +98,16 @@ void test2()
     tree.insert("a", 1);
     int a;
     assert(tree.search("a", a));
-    assert(!tree.search("b", a));
+    cout << a << endl;
+    tree.change_info("a", 2);
+    assert(tree.search("a", a));
+    cout << a << endl;
 }
 
 int main()
 {
     // test_constructor();
-    // test();
-    test2();
+    test();
+    // test2();
     return 0;
 }

@@ -69,12 +69,11 @@ private:
     }
     void clear(Node *subtree)
     {
-        if (!subtree)
+        if (subtree == nullptr)
             return;
         clear(subtree->left);
         clear(subtree->right);
         delete subtree;
-        return;
     }
     bool remove(const Key &key, Node *&subtree)
     {
@@ -140,7 +139,14 @@ private:
         else
             return search(key, subtree->right);
     }
-    // void inorder(ostream &out, Node *subtree) const;
+    void inorder(ostream &out, Node *subtree) const
+    {
+        if (subtree == nullptr)
+            return;
+        inorder(out, subtree->left);
+        out << subtree->key << " ";
+        inorder(out, subtree->right);
+    }
     void graph(ostream &out, Node *subtree, int indent) const
     {
         if (subtree == nullptr)
@@ -155,7 +161,12 @@ private:
             return 0;
         return subtree->height;
     }
-    int balance_factor(Node *subtree) { return height(subtree->right) - height(subtree->left); }
+    int balance_factor(Node *subtree)
+    {
+        if (subtree == nullptr)
+            return 0;
+        return height(subtree->right) - height(subtree->left);
+    }
     void balance(Node *&subtree)
     {
         int balance = balance_factor(subtree);
@@ -205,7 +216,14 @@ public:
         return *this;
     }
     bool insert(const Key &key, const Info &info) { return insert(key, info, root); }
-    // bool change_info(const Key &key, const Info &info);
+    bool change_info(const Key &key, const Info &info)
+    {
+        Node *node = search(key, root);
+        if (node == nullptr)
+            return false;
+        node->info = info;
+        return true;
+    }
     bool remove(const Key &key) { return remove(key, root); }
     bool search(const Key &key, Info &toReturn)
     {
@@ -223,7 +241,8 @@ public:
     }
     // indexing operator overloading
     // operator-
-    // void inorder(ostream &out) const;
+    void inorder(ostream &out) const { inorder(out, root); }
+
     void graph(ostream &out) const { graph(out, root, 0); }
 };
 
