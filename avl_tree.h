@@ -7,6 +7,8 @@
 #include <fstream>
 #include <chrono>
 #include <map>
+#include <vector>
+#include <algorithm>
 #include "avl_tree_test.h"
 
 using namespace std;
@@ -215,6 +217,23 @@ private:
         subtree->right->height = max(height(subtree->right->left), height(subtree->right->right)) + 1;
         subtree->height = max(height(subtree->left), height(subtree->right)) + 1;
     }
+    void collect_max_info(vector<pair<Key, Info>> &result, Node *subtree, unsigned cnt) const
+    {
+        if (subtree == nullptr)
+            return;
+        if (result.size() < cnt)
+            result.push_back(make_pair(subtree->key, subtree->info));
+        else
+        {
+            if (min_element(result.begin(), result.end(), [](const pair<Key, Info> &a, const pair<Key, Info> &b) { return a.second < b.second; })->second < subtree->info)
+            {
+                result.erase(min_element(result.begin(), result.end(), [](const pair<Key, Info> &a, const pair<Key, Info> &b) { return a.second < b.second; }));
+                result.push_back(make_pair(subtree->key, subtree->info));
+            }
+        }
+        collect_max_info(result, subtree->left, cnt);
+        collect_max_info(result, subtree->right, cnt);
+    }
 
 public:
     avl_tree() : root(nullptr) {}
@@ -273,6 +292,22 @@ public:
     void inorder(ostream &out) const { inorder(out, root); }
     void graph(ostream &out) const { graph(out, root, 0); }
     void graph_with_balance_factor(ostream &out) { graph_with_balance_factor(out, root, 0); }
+    void collect_max_info(vector<pair<Key, Info>> &result, unsigned cnt) const { collect_max_info(result, root, cnt); }
 };
+
+// maxinfo_selector returns cnt elements of the tree with the highest values of the info member.
+template <typename Key, typename Info>
+vector<pair<Key, Info>> maxinfo_selector(const avl_tree<Key, Info> &tree, unsigned cnt)
+{
+    vector<pair<Key, Info>> result;
+
+    if (tree.empty())
+        return result;
+
+    tree.collect_max_info(result, cnt);
+    sort(result.begin(), result.end(), [](const pair<Key, Info> &a, const pair<Key, Info> &b) { return a.second > b.second; });
+
+    return result;
+}
 
 #endif // AVL_TREE_H

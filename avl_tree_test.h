@@ -50,5 +50,6 @@ void test_indexing_operator();
 void test_inorder();
 void test_graph();
 void test_grapgh_with_balance_factor();
+void test_maxinfo_selector();
 
 #endif // AVL_TREE_H_TEST

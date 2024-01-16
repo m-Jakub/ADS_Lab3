@@ -6,66 +6,10 @@
 #include <fstream>
 #include <chrono>
 #include <map>
+#include <vector>
+#include <algorithm>
 
 using namespace std;
-
-void test()
-{
-    avl_tree<float, int> tree;
-    tree.insert(1.1, 1);
-    tree.insert(2.2, 2);
-    tree.insert(3.3, 3);
-    tree.insert(4.4, 4);
-    tree.insert(5.5, 5);
-    tree.insert(6.6, 6);
-    tree.insert(7.7, 7);
-    tree.insert(8.8, 8);
-    tree.insert(9.9, 9);
-    tree.insert(10.10, 10);
-    tree.insert(11.11, 11);
-    tree.insert(12.12, 12);
-    tree.insert(13.13, 13);
-    tree.insert(14.14, 14);
-    tree.insert(15.15, 15);
-    tree.insert(16.16, 16);
-    tree.insert(17.17, 17);
-    tree.insert(18.18, 18);
-    tree.insert(19.19, 19);
-    tree.insert(20.20, 20);
-    tree.insert(21.21, 21);
-    tree.insert(22.22, 22);
-    tree.insert(23.23, 23);
-    tree.insert(24.24, 24);
-    tree.insert(25.25, 25);
-    tree.insert(26.26, 26);
-    tree.insert(27.27, 27);
-    tree.insert(28.28, 28);
-    tree.insert(29.29, 29);
-    tree.insert(30.30, 30);
-    tree.insert(31.31, 31);
-    tree.insert(32.32, 32);
-    tree.insert(33.33, 33);
-    tree.insert(34.34, 34);
-    tree.remove(29.29);
-    tree.graph(cout);
-    cout << "=====================================" << endl;
-    tree.remove(28.28);
-    tree.graph(cout);
-    cout << "=====================================" << endl;
-    tree.remove(27.27);
-    tree.graph(cout);
-    cout << "=====================================" << endl;
-    tree.remove(26.26);
-    tree.graph(cout);
-    cout << "=====================================" << endl;
-    tree.remove(25.25);
-    tree.graph(cout);
-    cout << "=====================================" << endl;
-    tree.remove(24.24);
-    tree.remove(23.23);
-    tree.graph(cout);
-    tree.inorder(cout);
-}
 
 void test_constructor()
 {
@@ -590,9 +534,66 @@ bool count_words_speed_test()
     return 1;
 }
 
+void test_maxinfo_selector()
+{
+    cout << endl
+         << "===== Maxinfo selector test =====" << endl;
+
+    avl_tree<string, int> tree;
+
+    cout << "Test on a tree inserted with a whole alphabet:" << endl;
+    
+    tree.insert("m", 13);
+    tree.insert("g", 7);
+    tree.insert("x", 24);
+    tree.insert("q", 17);
+    tree.insert("b", 2);
+    tree.insert("y", 25);
+    tree.insert("u", 21);
+    tree.insert("f", 6);
+    tree.insert("o", 15);
+    tree.insert("d", 4);
+    tree.insert("w", 23);
+    tree.insert("z", 26);
+    tree.insert("h", 8);
+    tree.insert("v", 22);
+    tree.insert("i", 9);
+    tree.insert("j", 10);
+    tree.insert("e", 5);
+    tree.insert("a", 1);
+    tree.insert("r", 18);
+    tree.insert("t", 20);
+    tree.insert("k", 11);
+    tree.insert("s", 19);
+    tree.insert("c", 3);
+    tree.insert("p", 16);
+    tree.insert("l", 12);
+    tree.insert("n", 14);
+
+    vector<pair<string, int>> max_infos = maxinfo_selector(tree, 5);
+
+    for (auto &i : max_infos)
+    {
+        cout << i.first << " " << i.second << endl;
+    }
+
+    cout << "Test on a tree with less nodes than the cnt integer:" << endl;
+
+    tree.clear();
+    tree.insert("a", 1);
+    tree.insert("b", 2);
+    tree.insert("c", 3);
+
+    max_infos = maxinfo_selector(tree, 5);
+
+    for (auto &i : max_infos)
+    {
+        cout << i.first << " " << i.second << endl;
+    }
+}
+
 int main()
 {
-    // test();
     test_constructor();
     test_assignment_operator();
     test_copy_constructor();
@@ -608,6 +609,7 @@ int main()
     test_graph();
     test_grapgh_with_balance_factor();
     count_words_speed_test();
+    test_maxinfo_selector();
 
     cout << "All tests passed" << endl;
     return 0;
