@@ -270,15 +270,6 @@ public:
             throw "Key not found";
         return node->info;
     }
-    // {
-    //     Node *node = search(key, root);
-    //     if (node == nullptr)
-    //     {
-    //         insert(key, Info());
-    //         node = search(key, root);
-    //     }
-    //     return node->info;
-    // }
     void inorder(ostream &out) const { inorder(out, root); }
     void graph(ostream &out) const { graph(out, root, 0); }
     void graph_with_balance_factor(ostream &out) { graph_with_balance_factor(out, root, 0); }

@@ -542,7 +542,9 @@ void test_grapgh_with_balance_factor()
 
 bool count_words_speed_test()
 {
-    cout << "===== Counting words speed test =====" << endl;
+    cout << endl
+         << "===== Count words speed test =====" << endl;
+
     cout << "std::map results:" << endl;
     for (int rep = 0; rep < 5; ++rep)
     {
@@ -605,7 +607,7 @@ int main()
     test_inorder();
     test_graph();
     test_grapgh_with_balance_factor();
-    // count_words_speed_test();
+    count_words_speed_test();
 
     cout << "All tests passed" << endl;
     return 0;
