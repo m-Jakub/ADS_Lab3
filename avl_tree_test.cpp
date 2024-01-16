@@ -87,7 +87,21 @@ void test()
     tree.insert(34.34, 34);
     tree.remove(29.29);
     tree.graph(cout);
+    cout << "=====================================" << endl;
     tree.remove(28.28);
+    tree.graph(cout);
+    cout << "=====================================" << endl;
+    tree.remove(27.27);
+    tree.graph(cout);
+    cout << "=====================================" << endl;
+    tree.remove(26.26);
+    tree.graph(cout);
+    cout << "=====================================" << endl;
+    tree.remove(25.25);
+    tree.graph(cout);
+    cout << "=====================================" << endl;
+    tree.remove(24.24);
+    tree.remove(23.23);
     tree.graph(cout);
     tree.inorder(cout);
 }

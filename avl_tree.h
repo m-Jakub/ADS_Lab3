@@ -82,16 +82,22 @@ private:
         if (key == subtree->key)
         {
             if (subtree->left == nullptr && subtree->right == nullptr)
+                {
+                delete subtree;
                 subtree = nullptr;
+                }
+
             else if (subtree->left == nullptr)
             {
                 Node *temp = subtree;
                 subtree = subtree->right;
+                delete temp;
             }
             else if (subtree->right == nullptr)
             {
                 Node *temp = subtree;
                 subtree = subtree->left;
+                delete temp;
             }
             else
             {
@@ -102,7 +108,6 @@ private:
                 swap(subtree->info, temp->info);
                 remove(key, subtree->right);
             }
-            delete subtree;
             return true;
         }
         if (key < subtree->key)
@@ -149,7 +154,8 @@ private:
         if (subtree == nullptr)
             return;
         graph(out, subtree->right, indent + 8);
-        out << setw(indent) << " " << subtree->key << endl;
+        // out << setw(indent) << " " << subtree->key << endl;
+        out << setw(indent) << " " << subtree->height << endl;
         graph(out, subtree->left, indent + 8);
     }
     int height(Node *subtree)
@@ -236,8 +242,32 @@ public:
         clear(root);
         root = nullptr;
     }
-    // indexing operator overloading
-    
+    Info &operator[](const Key &key)
+    {
+        Node *node = search(key, root);
+        if (node == nullptr)
+        {
+            insert(key, Info());
+            node = search(key, root);
+        }
+        return node->info;
+    }
+    const Info &operator[](const Key &key) const
+    {
+        Node *node = search(key, root);
+        if (node == nullptr)
+            throw "Key not found";
+        return node->info;
+    }
+    // {
+    //     Node *node = search(key, root);
+    //     if (node == nullptr)
+    //     {
+    //         insert(key, Info());
+    //         node = search(key, root);
+    //     }
+    //     return node->info;
+    // }
     // operator-
     void inorder(ostream &out) const { inorder(out, root); }
     void graph(ostream &out) const { graph(out, root, 0); }
