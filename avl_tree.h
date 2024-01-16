@@ -3,8 +3,11 @@
 
 #include <iostream>
 #include <string>
-#include "avl_tree_test.h"
 #include <iomanip>
+#include <fstream>
+#include <chrono>
+#include <map>
+#include "avl_tree_test.h"
 
 using namespace std;
 
@@ -82,10 +85,10 @@ private:
         if (key == subtree->key)
         {
             if (subtree->left == nullptr && subtree->right == nullptr)
-                {
+            {
                 delete subtree;
                 subtree = nullptr;
-                }
+            }
 
             else if (subtree->left == nullptr)
             {
@@ -268,11 +271,8 @@ public:
     //     }
     //     return node->info;
     // }
-    // operator-
     void inorder(ostream &out) const { inorder(out, root); }
     void graph(ostream &out) const { graph(out, root, 0); }
 };
 
 #endif // AVL_TREE_H
-
-// sprawdzić czy height jest dobrze liczone

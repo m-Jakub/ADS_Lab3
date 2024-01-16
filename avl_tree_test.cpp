@@ -3,50 +3,11 @@
 #include <iostream>
 #include <string>
 #include <assert.h>
+#include <fstream>
+#include <chrono>
+#include <map>
 
 using namespace std;
-
-void test_constructor()
-{
-    // empty tree
-    avl_tree<string, int> tree_1;
-    assert(tree_1.empty());
-    
-    // tree with one node
-    avl_tree<string, int> tree_2;
-    tree_2.insert("a", 1);
-    assert(!tree_2.empty());
-
-    // adding 15 more nodes
-    tree_2.insert("b", 2);
-    tree_2.insert("d", 4);
-    tree_2.insert("e", 6);
-    tree_2.insert("g", 7);
-    tree_2.insert("i", 10);
-    tree_2.insert("k", 11);
-    tree_2.insert("m", 13);
-    tree_2.insert("n", 14);
-    tree_2.insert("p", 16);
-    tree_2.insert("c", 17);
-    tree_2.insert("l", 18);
-    
-    tree_2.graph(cout);
-    cout << endl;
-    cout << "=====================================" << endl;
-
-    // remove test
-    tree_2.remove("d");
-    tree_2.insert("h", 18);
-    tree_2.graph(cout);
-    cout << endl;
-    cout << "=====================================" << endl;
-
-    tree_2.remove("c");
-    tree_2.graph(cout);
-    cout << endl;
-    cout << "=====================================" << endl;
-
-}
 
 void test()
 {
@@ -106,22 +67,68 @@ void test()
     tree.inorder(cout);
 }
 
-void test2()
+void test_constructor()
 {
-    avl_tree<string, int> tree;
-    tree.insert("a", 1);
-    int a;
-    assert(tree.search("a", a));
-    cout << a << endl;
-    tree.change_info("a", 2);
-    assert(tree.search("a", a));
-    cout << a << endl;
+    // empty tree
+    avl_tree<string, int> tree_1;
+    assert(tree_1.empty());
+
+    
+}
+
+bool count_words_speed_test()
+{
+    cout << "===== Counting words speed test =====" << endl;
+    cout << "std::map results:" << endl;
+    for (int rep = 0; rep < 5; ++rep)
+    {
+        ifstream is("beagle_voyage.txt");
+        if (!is)
+        {
+            cout << "Error opening input file.\n";
+            return 0;
+        }
+        auto start_time = std::chrono::high_resolution_clock::now();
+        string word;
+        map<string, int> wc; // counting word occurrences in the stream
+        while (is >> word)
+        {
+            wc[word]++;
+        }
+        auto end_time = std::chrono::high_resolution_clock::now();
+        auto time = end_time - start_time;
+        std::cout << "Ellapsed time: " << time / std::chrono::milliseconds(1) << " ms.\n";
+    }
+
+    cout << "avl_tree results:" << endl;
+
+    for (int rep = 0; rep < 5; ++rep)
+    {
+        ifstream is("beagle_voyage.txt");
+        if (!is)
+        {
+            cout << "Error opening input file.\n";
+            return 0;
+        }
+        auto start_time = std::chrono::high_resolution_clock::now();
+        string word;
+        avl_tree<string, int> wc; // counting word occurrences in the stream
+        while (is >> word)
+        {
+            wc[word]++;
+        }
+        auto end_time = std::chrono::high_resolution_clock::now();
+        auto time = end_time - start_time;
+        std::cout << "Ellapsed time: " << time / std::chrono::milliseconds(1) << " ms.\n";
+    }
+    return 1;
 }
 
 int main()
 {
+    // test();
     // test_constructor();
-    test();
-    // test2();
+    count_words_speed_test();
+
     return 0;
 }
