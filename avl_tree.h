@@ -157,9 +157,17 @@ private:
         if (subtree == nullptr)
             return;
         graph(out, subtree->right, indent + 8);
-        // out << setw(indent) << " " << subtree->key << endl;
-        out << setw(indent) << " " << subtree->height << endl;
+        out << setw(indent) << " " << subtree->key << endl;
         graph(out, subtree->left, indent + 8);
+    }
+    void graph_with_balance_factor(ostream &out, Node *subtree, int indent)
+    {
+        if (subtree == nullptr)
+            return;
+        graph_with_balance_factor(out, subtree->right, indent + 8);
+        int balance = balance_factor(subtree);
+        out << setw(indent) << " " << balance << endl;
+        graph_with_balance_factor(out, subtree->left, indent + 8);
     }
     int height(Node *subtree)
     {
@@ -273,6 +281,7 @@ public:
     // }
     void inorder(ostream &out) const { inorder(out, root); }
     void graph(ostream &out) const { graph(out, root, 0); }
+    void graph_with_balance_factor(ostream &out) { graph_with_balance_factor(out, root, 0); }
 };
 
 #endif // AVL_TREE_H

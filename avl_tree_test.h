@@ -38,10 +38,10 @@ using namespace std;
 
 void test_constructor();
 void test_copy_constructor();
-void test_destructor();
 void test_assignment_operator();
+void test_destructor();
 void test_insert();
-void test_update_info();
+void test_change_info();
 void test_remove();
 void test_search();
 void test_empty();
@@ -49,6 +49,6 @@ void test_clear();
 void test_indexing_operator();
 void test_inorder();
 void test_graph();
-
+void test_grapgh_with_balance_factor();
 
 #endif // AVL_TREE_H_TEST
